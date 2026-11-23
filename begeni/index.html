@@ -11,7 +11,9 @@
  - Her satırdaki çubuk bir sonraki puana ilerlemeyi gösterir (ESIK beğeni = PUAN puan), geçince "+PUAN puan" belirir.
  - Profil fotoğrafı TikFinity'nin gönderdiği adresten gelir; açılmazsa baş harf görünür.
  - Yeni yayın: odanın toplam beğenisi sıfırlanınca ya da 3 saat beğeni gelmeyince liste kendiliğinden sıfırlanır.
- - Adres ekleri: ?tema=a|b|c|d, ?demo=1 sahte beğenilerle canlı dener, ?onizleme=1 örnek liste, ?durum=1 bağlantı noktası.
+ - v6: kural kartı 10.000 beğeni = 1 sarı kalp (?kalp=8000 gibi başka sayı yazar).
+ - v5: f temasında 6-10. sıradakiler listenin altındaki tek satırda 3 saniyede bir sırayla görünür (?donen=0 kapatır, ?donen=1 diğer temalarda açar).
+ - Adres ekleri: ?tema=a|b|c|d|e|f (e = sade 2, f = kartlar), ?demo=1 sahte beğenilerle canlı dener, ?onizleme=1 örnek liste, ?durum=1 bağlantı noktası.
  - Yazı tipleri (SIL Open Font License) sayfanın içine gömülü.
 -->
 <style>
@@ -53,7 +55,7 @@ body{width:320px;-webkit-font-smoothing:antialiased}
 .yuzde{transition:opacity .2s}
 .kural{display:flex;align-items:center;justify-content:center;gap:6px}
 .kural svg{display:block;flex:0 0 auto}
-.bos[hidden]{display:none}
+.bos[hidden],.doner[hidden]{display:none}
 .ikon svg,.kural .pk{display:none}
 .canli{display:none}
 .nokta{position:fixed;right:6px;top:6px;width:10px;height:10px;border-radius:50%;background:#ff5a5a;display:none;z-index:9}
@@ -99,6 +101,38 @@ body.durum .nokta{display:block}
 /* ============ C: TikTok ============ */
 
 /* ============ D: Blok (Minecraft yayınına uygun) ============ */
+/* ============ E: Sade 2 (23.11.2026) - tek koyu kart, kural iki satır, çubuk ve yüzde yok ============ */
+@keyframes kazan-e{0%{opacity:0;transform:translateY(-50%) scale(.6)}12%{opacity:1;transform:translateY(-50%) scale(1.08)}20%{transform:translateY(-50%)}82%{opacity:1}100%{opacity:0;transform:translateY(-50%)}}
+
+/* ============ F: Kartlar (23.11.2026) - her kişi ayrı kart, ilk üçe özel efekt ============ */
+@property --aci{syntax:"<angle>";inherits:false;initial-value:0deg}
+ background:linear-gradient(160deg,var(--t1),rgba(16,18,26,.92) 70%);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 45%,transparent)}
+ background:linear-gradient(rgba(18,20,28,.93),rgba(18,20,28,.93)) padding-box,linear-gradient(rgba(255,255,255,.08),rgba(255,255,255,.08)) border-box;border:1.5px solid transparent}
+/* top three: medal, tinted card, turning light on the edge */
+ background:linear-gradient(90deg,var(--ton),transparent 64%) padding-box,linear-gradient(#12141c,#12141c) padding-box,
+  conic-gradient(from var(--aci),#fff 0deg,var(--m) 14deg,transparent 80deg,transparent 180deg,#fff 180deg,var(--m) 194deg,transparent 260deg) border-box;
+ animation:f-don var(--hiz,4s) linear infinite}
+ background:linear-gradient(100deg,rgba(255,200,61,.42),rgba(255,160,0,.10) 30%,rgba(255,214,102,.34) 50%,rgba(255,160,0,.10) 70%,rgba(255,200,61,.30)) padding-box,linear-gradient(#17140b,#17140b) padding-box,
+  conic-gradient(from var(--aci),#fff 0deg,#ffc83d 14deg,transparent 80deg,transparent 180deg,#fff 180deg,#ffc83d 194deg,transparent 260deg) border-box;
+ background-size:220% 100%,100% 100%,100% 100%;animation:f-don 2.6s linear infinite,f-altin 4s linear infinite,f-isil 2.2s ease-in-out infinite}
+ background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 6' shape-rendering='crispEdges'%3E%3Cpath fill='%23ffd34d' d='M0 1h1v1h1v1h1V1h1V0h1v1h1v2h1V2h1V1h1v5H0z'/%3E%3Cpath fill='%23b07a00' d='M0 5h9v1H0z'/%3E%3Cpath fill='%23ff4d6d' d='M4 3h1v1H4z'/%3E%3C/svg%3E") center/contain no-repeat;image-rendering:pixelated;filter:drop-shadow(0 1px 0 #000) drop-shadow(0 0 5px rgba(255,200,61,.9));animation:f-tac 2.6s ease-in-out infinite}
+ background:conic-gradient(from var(--aci),#fff7cf,#ffc83d,#b97f00,#ffc83d,#fff7cf,#ffc83d,#b97f00,#ffc83d,#fff7cf);
+ -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3.5px),#000 calc(100% - 3px));mask:radial-gradient(farthest-side,transparent calc(100% - 3.5px),#000 calc(100% - 3px));animation:f-don 3s linear infinite}
+ -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 1px 0 rgba(0,0,0,.7));animation:f-isim 3s linear infinite}
+/* first place: a shine crosses the card and two stars twinkle */
+ background:linear-gradient(105deg,transparent 35%,rgba(255,240,190,.38) 48%,transparent 60%) no-repeat;background-size:220% 100%;animation:f-parla 4s ease-in-out infinite}
+ clip-path:polygon(50% 0,57% 43%,100% 50%,57% 57%,50% 100%,43% 57%,0 50%,43% 43%);filter:drop-shadow(0 0 4px #ffc83d);animation:f-yildiz 1.8s ease-in-out infinite}
+@keyframes f-don{to{--aci:360deg}}
+@keyframes f-altin{0%{background-position:110% 0,0 0,0 0}100%{background-position:-110% 0,0 0,0 0}}
+@keyframes f-isil{0%,100%{box-shadow:0 0 12px rgba(255,200,61,.30)}50%{box-shadow:0 0 22px 2px rgba(255,200,61,.55)}}
+@keyframes f-isim{0%{background-position:120% 0}60%,100%{background-position:-120% 0}}
+@keyframes f-kivilcim{0%{opacity:0;transform:translateY(0) scale(.6)}20%{opacity:1}100%{opacity:0;transform:translateY(-46px) scale(1)}}
+@keyframes f-canli{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes f-parla{0%,55%{background-position:130% 0}85%,100%{background-position:-30% 0}}
+@keyframes f-tac{0%,100%{transform:rotate(-8deg) translateY(0)}50%{transform:rotate(-8deg) translateY(-3px)}}
+@keyframes f-yildiz{0%,100%{opacity:0;transform:scale(.3)}50%{opacity:1;transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){[data-tema=f] .sira,[data-tema=f] .s1::after,[data-tema=f] .s1 .av::before,[data-tema=f] .s1 .av::after,[data-tema=f] .s1 .ust b,[data-tema=f] .s1 .ust::before,[data-tema=f] .s1 .ust::after,[data-tema=f] .s1 .ad::before,[data-tema=f] .s1 .ad::after{animation:none}}
+
 /* v4 (23.11.2026): sabit ödül paneli: beğeni = sarı kalp, takip = +1 seviye. Listenin üstünde (?kural=alt altında, ?kural=yok gizli) */
 .odul{display:flex;flex-direction:column;gap:5px;margin-bottom:8px;font-family:"Barlow Condensed",sans-serif}
 .odul[hidden]{display:none}
@@ -116,7 +150,8 @@ body.durum .nokta{display:block}
 .od .ik svg{display:block;width:34px;height:auto;shape-rendering:crispEdges;animation:od-ikon 2.4s ease-in-out infinite}
 .od .yz{display:flex;flex-direction:column;gap:4px;min-width:0}
 .od .ne{display:flex;align-items:baseline;gap:7px;font-size:19px;font-weight:700;letter-spacing:.06em;line-height:1;color:#e9ecf3;white-space:nowrap}
-.od .ne small{font-size:15px;font-weight:600;letter-spacing:.02em;color:#a3abbd}
+.od .ne small{font-size:15px;font-weight:600;letter-spacing:.02em;color:#a3abbd;text-transform:none}
+.od .ne,.od .ka{text-transform:uppercase}
 .od .ka{font-size:31px;font-weight:800;letter-spacing:.03em;line-height:1;color:var(--c);white-space:nowrap;animation:od-yazi 2.4s ease-in-out infinite}
 @keyframes od-parla{0%,45%{transform:translateX(-100%)}80%,100%{transform:translateX(100%)}}
 @keyframes od-ikon{0%,100%{transform:scale(1);filter:drop-shadow(0 0 4px var(--glow))}50%{transform:scale(1.09);filter:drop-shadow(0 0 12px var(--glow))}}
@@ -129,8 +164,8 @@ body.durum .nokta{display:block}
 <body>
 <div class="kart">
  <div class="odul" id="odul">
-  <div class="od kalp"><span class="ik"><svg viewBox="0 0 8 7" aria-hidden="true"><rect x="1" y="0" width="1" height="1" fill="#6b4500"/><rect x="2" y="0" width="1" height="1" fill="#6b4500"/><rect x="5" y="0" width="1" height="1" fill="#6b4500"/><rect x="6" y="0" width="1" height="1" fill="#6b4500"/><rect x="0" y="1" width="1" height="1" fill="#6b4500"/><rect x="1" y="1" width="1" height="1" fill="#fff3c4"/><rect x="2" y="1" width="1" height="1" fill="#ffc83d"/><rect x="3" y="1" width="1" height="1" fill="#6b4500"/><rect x="4" y="1" width="1" height="1" fill="#6b4500"/><rect x="5" y="1" width="1" height="1" fill="#ffc83d"/><rect x="6" y="1" width="1" height="1" fill="#ffc83d"/><rect x="7" y="1" width="1" height="1" fill="#6b4500"/><rect x="0" y="2" width="1" height="1" fill="#6b4500"/><rect x="1" y="2" width="1" height="1" fill="#ffc83d"/><rect x="2" y="2" width="1" height="1" fill="#ffc83d"/><rect x="3" y="2" width="1" height="1" fill="#ffc83d"/><rect x="4" y="2" width="1" height="1" fill="#ffc83d"/><rect x="5" y="2" width="1" height="1" fill="#ffc83d"/><rect x="6" y="2" width="1" height="1" fill="#ffc83d"/><rect x="7" y="2" width="1" height="1" fill="#6b4500"/><rect x="0" y="3" width="1" height="1" fill="#6b4500"/><rect x="1" y="3" width="1" height="1" fill="#ffc83d"/><rect x="2" y="3" width="1" height="1" fill="#ffc83d"/><rect x="3" y="3" width="1" height="1" fill="#ffc83d"/><rect x="4" y="3" width="1" height="1" fill="#ffc83d"/><rect x="5" y="3" width="1" height="1" fill="#ffc83d"/><rect x="6" y="3" width="1" height="1" fill="#ffc83d"/><rect x="7" y="3" width="1" height="1" fill="#6b4500"/><rect x="1" y="4" width="1" height="1" fill="#6b4500"/><rect x="2" y="4" width="1" height="1" fill="#ffc83d"/><rect x="3" y="4" width="1" height="1" fill="#ffc83d"/><rect x="4" y="4" width="1" height="1" fill="#ffc83d"/><rect x="5" y="4" width="1" height="1" fill="#ffc83d"/><rect x="6" y="4" width="1" height="1" fill="#6b4500"/><rect x="2" y="5" width="1" height="1" fill="#6b4500"/><rect x="3" y="5" width="1" height="1" fill="#ffc83d"/><rect x="4" y="5" width="1" height="1" fill="#ffc83d"/><rect x="5" y="5" width="1" height="1" fill="#6b4500"/><rect x="3" y="6" width="1" height="1" fill="#6b4500"/><rect x="4" y="6" width="1" height="1" fill="#6b4500"/></svg></span><span class="yz"><span class="ne">2.000 BEĞENİ<small>en fazla 5 kalp</small></span><span class="ka">1 SARI KALP</span></span></div>
-  <div class="od takip"><span class="ik"><svg viewBox="0 0 8 8" aria-hidden="true"><rect x="2" y="0" width="1" height="1" fill="#1f5c17"/><rect x="3" y="0" width="1" height="1" fill="#1f5c17"/><rect x="4" y="0" width="1" height="1" fill="#1f5c17"/><rect x="5" y="0" width="1" height="1" fill="#1f5c17"/><rect x="2" y="1" width="1" height="1" fill="#1f5c17"/><rect x="3" y="1" width="1" height="1" fill="#7cff6b"/><rect x="4" y="1" width="1" height="1" fill="#7cff6b"/><rect x="5" y="1" width="1" height="1" fill="#1f5c17"/><rect x="0" y="2" width="1" height="1" fill="#1f5c17"/><rect x="1" y="2" width="1" height="1" fill="#1f5c17"/><rect x="2" y="2" width="1" height="1" fill="#1f5c17"/><rect x="3" y="2" width="1" height="1" fill="#7cff6b"/><rect x="4" y="2" width="1" height="1" fill="#7cff6b"/><rect x="5" y="2" width="1" height="1" fill="#1f5c17"/><rect x="6" y="2" width="1" height="1" fill="#1f5c17"/><rect x="7" y="2" width="1" height="1" fill="#1f5c17"/><rect x="0" y="3" width="1" height="1" fill="#1f5c17"/><rect x="1" y="3" width="1" height="1" fill="#7cff6b"/><rect x="2" y="3" width="1" height="1" fill="#7cff6b"/><rect x="3" y="3" width="1" height="1" fill="#7cff6b"/><rect x="4" y="3" width="1" height="1" fill="#7cff6b"/><rect x="5" y="3" width="1" height="1" fill="#7cff6b"/><rect x="6" y="3" width="1" height="1" fill="#7cff6b"/><rect x="7" y="3" width="1" height="1" fill="#1f5c17"/><rect x="0" y="4" width="1" height="1" fill="#1f5c17"/><rect x="1" y="4" width="1" height="1" fill="#7cff6b"/><rect x="2" y="4" width="1" height="1" fill="#7cff6b"/><rect x="3" y="4" width="1" height="1" fill="#7cff6b"/><rect x="4" y="4" width="1" height="1" fill="#7cff6b"/><rect x="5" y="4" width="1" height="1" fill="#7cff6b"/><rect x="6" y="4" width="1" height="1" fill="#7cff6b"/><rect x="7" y="4" width="1" height="1" fill="#1f5c17"/><rect x="0" y="5" width="1" height="1" fill="#1f5c17"/><rect x="1" y="5" width="1" height="1" fill="#1f5c17"/><rect x="2" y="5" width="1" height="1" fill="#1f5c17"/><rect x="3" y="5" width="1" height="1" fill="#7cff6b"/><rect x="4" y="5" width="1" height="1" fill="#7cff6b"/><rect x="5" y="5" width="1" height="1" fill="#1f5c17"/><rect x="6" y="5" width="1" height="1" fill="#1f5c17"/><rect x="7" y="5" width="1" height="1" fill="#1f5c17"/><rect x="2" y="6" width="1" height="1" fill="#1f5c17"/><rect x="3" y="6" width="1" height="1" fill="#7cff6b"/><rect x="4" y="6" width="1" height="1" fill="#7cff6b"/><rect x="5" y="6" width="1" height="1" fill="#1f5c17"/><rect x="2" y="7" width="1" height="1" fill="#1f5c17"/><rect x="3" y="7" width="1" height="1" fill="#1f5c17"/><rect x="4" y="7" width="1" height="1" fill="#1f5c17"/><rect x="5" y="7" width="1" height="1" fill="#1f5c17"/></svg></span><span class="yz"><span class="ne">TAKİP ET</span><span class="ka">+1 SEVİYE</span></span></div>
+  <div class="od kalp"><span class="ik"><svg viewBox="0 0 8 7" aria-hidden="true"><rect x="1" y="0" width="1" height="1" fill="#6b4500"/><rect x="2" y="0" width="1" height="1" fill="#6b4500"/><rect x="5" y="0" width="1" height="1" fill="#6b4500"/><rect x="6" y="0" width="1" height="1" fill="#6b4500"/><rect x="0" y="1" width="1" height="1" fill="#6b4500"/><rect x="1" y="1" width="1" height="1" fill="#fff3c4"/><rect x="2" y="1" width="1" height="1" fill="#ffc83d"/><rect x="3" y="1" width="1" height="1" fill="#6b4500"/><rect x="4" y="1" width="1" height="1" fill="#6b4500"/><rect x="5" y="1" width="1" height="1" fill="#ffc83d"/><rect x="6" y="1" width="1" height="1" fill="#ffc83d"/><rect x="7" y="1" width="1" height="1" fill="#6b4500"/><rect x="0" y="2" width="1" height="1" fill="#6b4500"/><rect x="1" y="2" width="1" height="1" fill="#ffc83d"/><rect x="2" y="2" width="1" height="1" fill="#ffc83d"/><rect x="3" y="2" width="1" height="1" fill="#ffc83d"/><rect x="4" y="2" width="1" height="1" fill="#ffc83d"/><rect x="5" y="2" width="1" height="1" fill="#ffc83d"/><rect x="6" y="2" width="1" height="1" fill="#ffc83d"/><rect x="7" y="2" width="1" height="1" fill="#6b4500"/><rect x="0" y="3" width="1" height="1" fill="#6b4500"/><rect x="1" y="3" width="1" height="1" fill="#ffc83d"/><rect x="2" y="3" width="1" height="1" fill="#ffc83d"/><rect x="3" y="3" width="1" height="1" fill="#ffc83d"/><rect x="4" y="3" width="1" height="1" fill="#ffc83d"/><rect x="5" y="3" width="1" height="1" fill="#ffc83d"/><rect x="6" y="3" width="1" height="1" fill="#ffc83d"/><rect x="7" y="3" width="1" height="1" fill="#6b4500"/><rect x="1" y="4" width="1" height="1" fill="#6b4500"/><rect x="2" y="4" width="1" height="1" fill="#ffc83d"/><rect x="3" y="4" width="1" height="1" fill="#ffc83d"/><rect x="4" y="4" width="1" height="1" fill="#ffc83d"/><rect x="5" y="4" width="1" height="1" fill="#ffc83d"/><rect x="6" y="4" width="1" height="1" fill="#6b4500"/><rect x="2" y="5" width="1" height="1" fill="#6b4500"/><rect x="3" y="5" width="1" height="1" fill="#ffc83d"/><rect x="4" y="5" width="1" height="1" fill="#ffc83d"/><rect x="5" y="5" width="1" height="1" fill="#6b4500"/><rect x="3" y="6" width="1" height="1" fill="#6b4500"/><rect x="4" y="6" width="1" height="1" fill="#6b4500"/></svg></span><span class="yz"><span class="ne" id="kalpAdim">10.000 beğeni<small>en fazla 5 kalp</small></span><span class="ka">1 sarı kalp</span></span></div>
+  <div class="od takip"><span class="ik"><svg viewBox="0 0 8 8" aria-hidden="true"><rect x="2" y="0" width="1" height="1" fill="#1f5c17"/><rect x="3" y="0" width="1" height="1" fill="#1f5c17"/><rect x="4" y="0" width="1" height="1" fill="#1f5c17"/><rect x="5" y="0" width="1" height="1" fill="#1f5c17"/><rect x="2" y="1" width="1" height="1" fill="#1f5c17"/><rect x="3" y="1" width="1" height="1" fill="#7cff6b"/><rect x="4" y="1" width="1" height="1" fill="#7cff6b"/><rect x="5" y="1" width="1" height="1" fill="#1f5c17"/><rect x="0" y="2" width="1" height="1" fill="#1f5c17"/><rect x="1" y="2" width="1" height="1" fill="#1f5c17"/><rect x="2" y="2" width="1" height="1" fill="#1f5c17"/><rect x="3" y="2" width="1" height="1" fill="#7cff6b"/><rect x="4" y="2" width="1" height="1" fill="#7cff6b"/><rect x="5" y="2" width="1" height="1" fill="#1f5c17"/><rect x="6" y="2" width="1" height="1" fill="#1f5c17"/><rect x="7" y="2" width="1" height="1" fill="#1f5c17"/><rect x="0" y="3" width="1" height="1" fill="#1f5c17"/><rect x="1" y="3" width="1" height="1" fill="#7cff6b"/><rect x="2" y="3" width="1" height="1" fill="#7cff6b"/><rect x="3" y="3" width="1" height="1" fill="#7cff6b"/><rect x="4" y="3" width="1" height="1" fill="#7cff6b"/><rect x="5" y="3" width="1" height="1" fill="#7cff6b"/><rect x="6" y="3" width="1" height="1" fill="#7cff6b"/><rect x="7" y="3" width="1" height="1" fill="#1f5c17"/><rect x="0" y="4" width="1" height="1" fill="#1f5c17"/><rect x="1" y="4" width="1" height="1" fill="#7cff6b"/><rect x="2" y="4" width="1" height="1" fill="#7cff6b"/><rect x="3" y="4" width="1" height="1" fill="#7cff6b"/><rect x="4" y="4" width="1" height="1" fill="#7cff6b"/><rect x="5" y="4" width="1" height="1" fill="#7cff6b"/><rect x="6" y="4" width="1" height="1" fill="#7cff6b"/><rect x="7" y="4" width="1" height="1" fill="#1f5c17"/><rect x="0" y="5" width="1" height="1" fill="#1f5c17"/><rect x="1" y="5" width="1" height="1" fill="#1f5c17"/><rect x="2" y="5" width="1" height="1" fill="#1f5c17"/><rect x="3" y="5" width="1" height="1" fill="#7cff6b"/><rect x="4" y="5" width="1" height="1" fill="#7cff6b"/><rect x="5" y="5" width="1" height="1" fill="#1f5c17"/><rect x="6" y="5" width="1" height="1" fill="#1f5c17"/><rect x="7" y="5" width="1" height="1" fill="#1f5c17"/><rect x="2" y="6" width="1" height="1" fill="#1f5c17"/><rect x="3" y="6" width="1" height="1" fill="#7cff6b"/><rect x="4" y="6" width="1" height="1" fill="#7cff6b"/><rect x="5" y="6" width="1" height="1" fill="#1f5c17"/><rect x="2" y="7" width="1" height="1" fill="#1f5c17"/><rect x="3" y="7" width="1" height="1" fill="#1f5c17"/><rect x="4" y="7" width="1" height="1" fill="#1f5c17"/><rect x="5" y="7" width="1" height="1" fill="#1f5c17"/></svg></span><span class="yz"><span class="ne">Takip et</span><span class="ka">+1 seviye</span></span></div>
  </div>
  <div class="bas">
   <span class="ikon">
@@ -142,6 +177,7 @@ body.durum .nokta{display:block}
   <span class="canli"><i></i>CANLI</span>
  </div>
  <div class="liste" id="liste"></div>
+ <div class="doner" id="doner" hidden></div>
  <p class="bos" id="bos" hidden></p>
  <p class="kural" id="kural"><svg class="k" viewBox="0 0 24 24" aria-hidden="true"><path fill="#ff2d55" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.5 3 5 6.4 5c2.1 0 3.6 1.2 4.6 2.6l1 1.3 1-1.3C14 6.2 15.5 5 17.6 5 21 5 23.1 8.5 21.6 11.8 19.5 16.4 12 21 12 21z"/></svg><svg class="pk" viewBox="0 0 9 8" shape-rendering="crispEdges" aria-hidden="true"><path fill="#5c1634" d="M0 2h1v1h-1zM0 3h1v1h-1zM1 1h1v1h-1zM1 4h1v1h-1zM2 0h1v1h-1zM2 5h1v1h-1zM3 0h1v1h-1zM3 6h1v1h-1zM4 1h1v1h-1zM4 7h1v1h-1zM5 0h1v1h-1zM5 6h1v1h-1zM6 0h1v1h-1zM6 5h1v1h-1zM7 1h1v1h-1zM7 4h1v1h-1zM8 2h1v1h-1zM8 3h1v1h-1z"/><path fill="#ff4f86" d="M1 2h1v1h-1zM1 3h1v1h-1zM2 1h1v1h-1zM2 4h1v1h-1zM3 1h1v1h-1zM3 3h1v1h-1zM3 4h1v1h-1zM4 2h1v1h-1zM4 3h1v1h-1zM4 4h1v1h-1zM5 1h1v1h-1zM5 2h1v1h-1zM5 3h1v1h-1zM5 4h1v1h-1zM6 1h1v1h-1zM6 2h1v1h-1zM7 2h1v1h-1z"/><path fill="#d92f66" d="M3 5h1v1h-1zM4 5h1v1h-1zM4 6h1v1h-1zM5 5h1v1h-1zM6 3h1v1h-1zM6 4h1v1h-1zM7 3h1v1h-1z"/><path fill="#ffd1e0" d="M2 2h1v1h-1zM2 3h1v1h-1zM3 2h1v1h-1z"/></svg><span></span></p>
 </div>
@@ -165,16 +201,20 @@ body.durum .nokta{display:block}
  var YENI_YAYIN_MS=3*60*60*1000;     // bu kadar süre beğeni gelmezse yeni yayın sayılır
  var ANAHTAR='rhaelv-begeni-v1';
  var q=new URLSearchParams(location.search);
- var TEMA=(q.get('tema')||'a').toLowerCase().replace(/[^a-d]/g,'').slice(-1)||'a';
+ var TEMA=(q.get('tema')||'a').toLowerCase().replace(/[^a-f]/g,'').slice(-1)||'a';
  document.documentElement.dataset.tema=TEMA;
+ // v6 (24.11.2026): 10.000 beğeni = 1 sarı kalp (sunucu: begeni kalp <sayı>); başka sayı için ?kalp=8000
+ var kalpN=parseInt(q.get('kalp'),10);if(kalpN>=100){var kA=document.getElementById('kalpAdim');kA.firstChild.nodeValue=kalpN.toLocaleString('tr-TR')+' beğeni';}
  var odul=document.getElementById('odul'),kq=(q.get('kural')||'').toLowerCase();
  if(kq==='yok')odul.hidden=true;else if(kq==='alt'){var kt=odul.parentNode;kt.classList.add('kural-alt');kt.appendChild(odul);}
  var YAZI={a:['Beğeni sıralaması','Henüz beğeni yok'],b:['Beğeni sıralaması','İlk beğeniyi atan burada görünür'],
-           c:['En çok beğenenler','İlk beğeniyi atan burada görünür'],d:['Beğeni sıralaması','Henüz beğeni yok']}[TEMA];
+           c:['En çok beğenenler','İlk beğeniyi atan burada görünür'],d:['Beğeni sıralaması','Henüz beğeni yok'],e:['Beğeni sıralaması','İlk beğeniyi atan burada görünür'],f:['Beğeni sıralaması','İlk beğeniyi atan burada görünür']}[TEMA];
  document.getElementById('baslik').textContent=YAZI[0];
  var kural=document.getElementById('kural').querySelector('span');
  kural.append('Her '+ESIK.toLocaleString('tr-TR')+' beğeni = ');var kb=document.createElement('b');kb.textContent='+'+PUAN+' puan';kural.appendChild(kb);
  var liste=document.getElementById('liste'),bos=document.getElementById('bos'),kalip=document.getElementById('kalip');
+ // v5 (23.11.2026): places 6-10 take turns in one row under the list (theme f, or ?donen=1 / ?donen=0)
+ var DONER=q.get('donen')?q.get('donen')==='1':TEMA==='f',DONER_MS=3000,donerKutu=document.getElementById('doner'),donerEl=null,donerI=0,donerListe=[],donerId='';
  bos.textContent=YAZI[1];
  if(q.get('durum')==='1')document.body.classList.add('durum');
 
@@ -244,7 +284,8 @@ body.durum .nokta{display:block}
   clearTimeout(el._kz);el._kz=setTimeout(function(){k.remove();el.classList.remove('kaz');},1950);
  }
  function ciz(){
-  var top=Object.keys(S.u).map(function(i){return S.u[i]}).sort(sirala).slice(0,GOSTER);
+  var tum=Object.keys(S.u).map(function(i){return S.u[i]}).sort(sirala),top=tum.slice(0,GOSTER);
+  donerListe=DONER?tum.slice(GOSTER,GOSTER+5):[];
   var once={};Array.prototype.forEach.call(liste.children,function(el){once[el.dataset.id]=el.getBoundingClientRect().top;});
   var kalan={};top.forEach(function(x){kalan[x.id]=1});
   Array.prototype.slice.call(liste.children).forEach(function(el){if(!kalan[el.dataset.id]){el.remove();delete EL[el.dataset.id];}});
@@ -277,7 +318,31 @@ body.durum .nokta{display:block}
    else if(Math.abs(o-s)>1)el.animate([{transform:'translateY('+(o-s)+'px)'},{transform:'none'}],{duration:480,easing:'cubic-bezier(.2,.8,.2,1)'});
   });
   bos.hidden=top.length>0;
+  donerYaz(false);
  }
+ function donerYaz(anim){
+  if(!DONER)return;
+  if(!donerListe.length){donerKutu.hidden=true;donerId='';return;}
+  if(donerI>=donerListe.length)donerI=0;
+  var i=donerI,x=donerListe[i],ilk=!donerEl;
+  if(ilk){donerEl=kalip.content.firstElementChild.cloneNode(true);donerKutu.appendChild(donerEl);}
+  donerKutu.hidden=false;
+  function doldur(){
+   var p=(x.n%ESIK)/ESIK;
+   donerEl.className='sira s'+(GOSTER+1+i)+' donen';donerEl.dataset.id=x.id;
+   donerEl.querySelector('.no').textContent=GOSTER+1+i;
+   donerEl.querySelector('.ust b').textContent=x.ad;avatar(donerEl,x);
+   donerEl.style.setProperty('--p',p.toFixed(3));donerEl.querySelector('.yuzde').textContent='%'+Math.floor(p*100);
+   donerEl.querySelector('.say .n').textContent=x.n.toLocaleString('tr-TR');donerId=x.id;
+  }
+  if(anim&&!ilk&&donerId!==x.id&&donerEl.animate){
+   var d=donerEl.querySelector('.dolu');
+   var a=donerEl.animate([{opacity:1,transform:'none'},{opacity:0,transform:'translateY(-8px)'}],{duration:170,easing:'ease-in',fill:'forwards'});
+   a.onfinish=function(){d.style.transition='none';doldur();void d.offsetWidth;d.style.transition='';a.cancel();
+    donerEl.animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'none'}],{duration:320,easing:'cubic-bezier(.2,.8,.2,1)'});};
+  }else doldur();
+ }
+ if(DONER)setInterval(function(){if(donerListe.length>1){donerI=(donerI+1)%donerListe.length;donerYaz(true);}},DONER_MS);
 
  /* TikFinity Event API */
  var ADRES=['ws://127.0.0.1:21213/','ws://localhost:21213/'],sira=0,nokta=document.getElementById('nokta');
@@ -297,15 +362,15 @@ body.durum .nokta{display:block}
    '<rect width="60" height="60" fill="url(#g)"/><g filter="url(#b)" fill="hsl('+h[1]+' 35% 18%)" opacity=".85"><circle cx="30" cy="26" r="11"/><ellipse cx="30" cy="58" rx="21" ry="16"/></g></svg>';
   return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(s);
  }
- var ornek=[['Ayşe Nur','aysenur.mc'],['kerem55','kerem55'],['Mira','mira.blm'],['Deniz Taş','deniztas'],['efe_tr','efe_tr'],['Zeynep','zynp34'],['Baran','baran.07']];
+ var ornek=[['Ayşe Nur','aysenur.mc'],['kerem55','kerem55'],['Mira','mira.blm'],['Deniz Taş','deniztas'],['efe_tr','efe_tr'],['Zeynep','zynp34'],['Baran','baran.07'],['elif.mc','elif.mc'],['Kaan','kaan_61'],['Selin Ay','selinay']];
  if(q.get('onizleme')==='1'){
-  sifirla();var t=Date.now(),sayilar=[15730,10536,7056,1533,830,125,40];
+  sifirla();var t=Date.now(),sayilar=[15730,10536,7056,1533,830,612,455,318,207,96];
   ornek.forEach(function(o,i){S.u[o[1]]={id:o[1],n:sayilar[i],ts:t+i,ad:o[0],foto:i===4?'':yuz(i)};});
   ciz();
   if(q.get('kazan')==='1')kazandi(liste.children[1]);
  }else if(q.get('demo')==='1'){
   sifirla();
-  var bas0=[880,640,520,300,150,60,20];
+  var bas0=[880,640,520,300,150,90,70,50,30,20];
   ornek.forEach(function(o,i){begeni({uniqueId:o[1],nickname:o[0],likeCount:Math.min(1000,bas0[i]),profilePictureUrl:yuz(i)});});
   setInterval(function(){
    var i=Math.floor(Math.pow(Math.random(),1.6)*ornek.length),o=ornek[i];
