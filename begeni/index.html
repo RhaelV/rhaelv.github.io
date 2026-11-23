@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Beğeni Sıralaması</title>
 <!--
- RhaelV beğeni sıralaması v3 - TikTok LIVE Studio "Link" kaynağı için, 320 px genişlik
+ RhaelV beğeni sıralaması v4 - TikTok LIVE Studio "Link" kaynağı için, 320 px genişlik
+ - v4: üstte sabit, parlayan ödül paneli: 2.000 beğeni = 1 sarı kalp, takip et = +1 seviye (?kural=alt altta, ?kural=yok gizli).
  - Veri: TikFinity Event API (ws://127.0.0.1:21213), "like" olayları kişi kişi toplanır, ilk 5 kişi gösterilir.
  - Her satırdaki çubuk bir sonraki puana ilerlemeyi gösterir (ESIK beğeni = PUAN puan), geçince "+PUAN puan" belirir.
  - Profil fotoğrafı TikFinity'nin gönderdiği adresten gelir; açılmazsa baş harf görünür.
@@ -98,11 +99,39 @@ body.durum .nokta{display:block}
 /* ============ C: TikTok ============ */
 
 /* ============ D: Blok (Minecraft yayınına uygun) ============ */
+/* v4 (23.11.2026): sabit ödül paneli: beğeni = sarı kalp, takip = +1 seviye. Listenin üstünde (?kural=alt altında, ?kural=yok gizli) */
+.odul{display:flex;flex-direction:column;gap:5px;margin-bottom:8px;font-family:"Barlow Condensed",sans-serif}
+.odul[hidden]{display:none}
+.kart.kural-alt .odul{margin:8px 0 0}
+.od{position:relative;height:58px;display:flex;align-items:center;gap:10px;padding-right:24px;overflow:hidden;isolation:isolate;
+ background:linear-gradient(90deg,var(--t1),#141924 46%,#0f131b);clip-path:polygon(0 0,100% 0,calc(100% - 14px) 100%,0 100%)}
+.od.kalp{--c:#ffc83d;--t1:rgba(255,200,61,.34);--glow:rgba(255,200,61,.9)}
+.od.takip{--c:#7cff6b;--t1:rgba(124,255,107,.26);--glow:rgba(124,255,107,.85)}
+.od::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--c);box-shadow:0 0 16px 3px var(--glow);animation:od-nabiz 2.4s ease-in-out infinite}
+.od::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+ background:linear-gradient(105deg,transparent 32%,rgba(255,255,255,.16) 42%,rgba(255,255,255,.46) 48%,rgba(255,255,255,.14) 54%,transparent 64%);transform:translateX(-100%);animation:od-parla 5s linear infinite}
+.od.takip::after{animation-delay:2.5s}
+.od.takip::before,.od.takip .ik svg,.od.takip .ka{animation-delay:1.2s}
+.od .ik{flex:0 0 60px;align-self:stretch;display:grid;place-items:center;background:radial-gradient(circle at 50% 50%,var(--t1),transparent 72%)}
+.od .ik svg{display:block;width:34px;height:auto;shape-rendering:crispEdges;animation:od-ikon 2.4s ease-in-out infinite}
+.od .yz{display:flex;flex-direction:column;gap:4px;min-width:0}
+.od .ne{display:flex;align-items:baseline;gap:7px;font-size:19px;font-weight:700;letter-spacing:.06em;line-height:1;color:#e9ecf3;white-space:nowrap}
+.od .ne small{font-size:15px;font-weight:600;letter-spacing:.02em;color:#a3abbd}
+.od .ka{font-size:31px;font-weight:800;letter-spacing:.03em;line-height:1;color:var(--c);white-space:nowrap;animation:od-yazi 2.4s ease-in-out infinite}
+@keyframes od-parla{0%,45%{transform:translateX(-100%)}80%,100%{transform:translateX(100%)}}
+@keyframes od-ikon{0%,100%{transform:scale(1);filter:drop-shadow(0 0 4px var(--glow))}50%{transform:scale(1.09);filter:drop-shadow(0 0 12px var(--glow))}}
+@keyframes od-yazi{0%,100%{text-shadow:0 0 7px var(--glow),0 2px 0 rgba(0,0,0,.6)}50%{text-shadow:0 0 18px var(--glow),0 0 3px rgba(255,255,255,.9),0 2px 0 rgba(0,0,0,.6)}}
+@keyframes od-nabiz{0%,100%{opacity:.85}50%{opacity:1;box-shadow:0 0 22px 5px var(--glow)}}
+@media (prefers-reduced-motion:reduce){.od::before,.od::after,.od .ik svg,.od .ka{animation:none}}
 @media (prefers-reduced-motion:reduce){.dolu{transition:none}.say.vur .n,.canli i{animation:none}}
 </style>
 </head>
 <body>
 <div class="kart">
+ <div class="odul" id="odul">
+  <div class="od kalp"><span class="ik"><svg viewBox="0 0 8 7" aria-hidden="true"><rect x="1" y="0" width="1" height="1" fill="#6b4500"/><rect x="2" y="0" width="1" height="1" fill="#6b4500"/><rect x="5" y="0" width="1" height="1" fill="#6b4500"/><rect x="6" y="0" width="1" height="1" fill="#6b4500"/><rect x="0" y="1" width="1" height="1" fill="#6b4500"/><rect x="1" y="1" width="1" height="1" fill="#fff3c4"/><rect x="2" y="1" width="1" height="1" fill="#ffc83d"/><rect x="3" y="1" width="1" height="1" fill="#6b4500"/><rect x="4" y="1" width="1" height="1" fill="#6b4500"/><rect x="5" y="1" width="1" height="1" fill="#ffc83d"/><rect x="6" y="1" width="1" height="1" fill="#ffc83d"/><rect x="7" y="1" width="1" height="1" fill="#6b4500"/><rect x="0" y="2" width="1" height="1" fill="#6b4500"/><rect x="1" y="2" width="1" height="1" fill="#ffc83d"/><rect x="2" y="2" width="1" height="1" fill="#ffc83d"/><rect x="3" y="2" width="1" height="1" fill="#ffc83d"/><rect x="4" y="2" width="1" height="1" fill="#ffc83d"/><rect x="5" y="2" width="1" height="1" fill="#ffc83d"/><rect x="6" y="2" width="1" height="1" fill="#ffc83d"/><rect x="7" y="2" width="1" height="1" fill="#6b4500"/><rect x="0" y="3" width="1" height="1" fill="#6b4500"/><rect x="1" y="3" width="1" height="1" fill="#ffc83d"/><rect x="2" y="3" width="1" height="1" fill="#ffc83d"/><rect x="3" y="3" width="1" height="1" fill="#ffc83d"/><rect x="4" y="3" width="1" height="1" fill="#ffc83d"/><rect x="5" y="3" width="1" height="1" fill="#ffc83d"/><rect x="6" y="3" width="1" height="1" fill="#ffc83d"/><rect x="7" y="3" width="1" height="1" fill="#6b4500"/><rect x="1" y="4" width="1" height="1" fill="#6b4500"/><rect x="2" y="4" width="1" height="1" fill="#ffc83d"/><rect x="3" y="4" width="1" height="1" fill="#ffc83d"/><rect x="4" y="4" width="1" height="1" fill="#ffc83d"/><rect x="5" y="4" width="1" height="1" fill="#ffc83d"/><rect x="6" y="4" width="1" height="1" fill="#6b4500"/><rect x="2" y="5" width="1" height="1" fill="#6b4500"/><rect x="3" y="5" width="1" height="1" fill="#ffc83d"/><rect x="4" y="5" width="1" height="1" fill="#ffc83d"/><rect x="5" y="5" width="1" height="1" fill="#6b4500"/><rect x="3" y="6" width="1" height="1" fill="#6b4500"/><rect x="4" y="6" width="1" height="1" fill="#6b4500"/></svg></span><span class="yz"><span class="ne">2.000 BEĞENİ<small>en fazla 5 kalp</small></span><span class="ka">1 SARI KALP</span></span></div>
+  <div class="od takip"><span class="ik"><svg viewBox="0 0 8 8" aria-hidden="true"><rect x="2" y="0" width="1" height="1" fill="#1f5c17"/><rect x="3" y="0" width="1" height="1" fill="#1f5c17"/><rect x="4" y="0" width="1" height="1" fill="#1f5c17"/><rect x="5" y="0" width="1" height="1" fill="#1f5c17"/><rect x="2" y="1" width="1" height="1" fill="#1f5c17"/><rect x="3" y="1" width="1" height="1" fill="#7cff6b"/><rect x="4" y="1" width="1" height="1" fill="#7cff6b"/><rect x="5" y="1" width="1" height="1" fill="#1f5c17"/><rect x="0" y="2" width="1" height="1" fill="#1f5c17"/><rect x="1" y="2" width="1" height="1" fill="#1f5c17"/><rect x="2" y="2" width="1" height="1" fill="#1f5c17"/><rect x="3" y="2" width="1" height="1" fill="#7cff6b"/><rect x="4" y="2" width="1" height="1" fill="#7cff6b"/><rect x="5" y="2" width="1" height="1" fill="#1f5c17"/><rect x="6" y="2" width="1" height="1" fill="#1f5c17"/><rect x="7" y="2" width="1" height="1" fill="#1f5c17"/><rect x="0" y="3" width="1" height="1" fill="#1f5c17"/><rect x="1" y="3" width="1" height="1" fill="#7cff6b"/><rect x="2" y="3" width="1" height="1" fill="#7cff6b"/><rect x="3" y="3" width="1" height="1" fill="#7cff6b"/><rect x="4" y="3" width="1" height="1" fill="#7cff6b"/><rect x="5" y="3" width="1" height="1" fill="#7cff6b"/><rect x="6" y="3" width="1" height="1" fill="#7cff6b"/><rect x="7" y="3" width="1" height="1" fill="#1f5c17"/><rect x="0" y="4" width="1" height="1" fill="#1f5c17"/><rect x="1" y="4" width="1" height="1" fill="#7cff6b"/><rect x="2" y="4" width="1" height="1" fill="#7cff6b"/><rect x="3" y="4" width="1" height="1" fill="#7cff6b"/><rect x="4" y="4" width="1" height="1" fill="#7cff6b"/><rect x="5" y="4" width="1" height="1" fill="#7cff6b"/><rect x="6" y="4" width="1" height="1" fill="#7cff6b"/><rect x="7" y="4" width="1" height="1" fill="#1f5c17"/><rect x="0" y="5" width="1" height="1" fill="#1f5c17"/><rect x="1" y="5" width="1" height="1" fill="#1f5c17"/><rect x="2" y="5" width="1" height="1" fill="#1f5c17"/><rect x="3" y="5" width="1" height="1" fill="#7cff6b"/><rect x="4" y="5" width="1" height="1" fill="#7cff6b"/><rect x="5" y="5" width="1" height="1" fill="#1f5c17"/><rect x="6" y="5" width="1" height="1" fill="#1f5c17"/><rect x="7" y="5" width="1" height="1" fill="#1f5c17"/><rect x="2" y="6" width="1" height="1" fill="#1f5c17"/><rect x="3" y="6" width="1" height="1" fill="#7cff6b"/><rect x="4" y="6" width="1" height="1" fill="#7cff6b"/><rect x="5" y="6" width="1" height="1" fill="#1f5c17"/><rect x="2" y="7" width="1" height="1" fill="#1f5c17"/><rect x="3" y="7" width="1" height="1" fill="#1f5c17"/><rect x="4" y="7" width="1" height="1" fill="#1f5c17"/><rect x="5" y="7" width="1" height="1" fill="#1f5c17"/></svg></span><span class="yz"><span class="ne">TAKİP ET</span><span class="ka">+1 SEVİYE</span></span></div>
+ </div>
  <div class="bas">
   <span class="ikon">
    <svg class="k" viewBox="0 0 24 24" aria-hidden="true"><path fill="#ff4d6d" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.5 3 5 6.4 5c2.1 0 3.6 1.2 4.6 2.6l1 1.3 1-1.3C14 6.2 15.5 5 17.6 5 21 5 23.1 8.5 21.6 11.8 19.5 16.4 12 21 12 21z"/></svg>
@@ -138,6 +167,8 @@ body.durum .nokta{display:block}
  var q=new URLSearchParams(location.search);
  var TEMA=(q.get('tema')||'a').toLowerCase().replace(/[^a-d]/g,'').slice(-1)||'a';
  document.documentElement.dataset.tema=TEMA;
+ var odul=document.getElementById('odul'),kq=(q.get('kural')||'').toLowerCase();
+ if(kq==='yok')odul.hidden=true;else if(kq==='alt'){var kt=odul.parentNode;kt.classList.add('kural-alt');kt.appendChild(odul);}
  var YAZI={a:['Beğeni sıralaması','Henüz beğeni yok'],b:['Beğeni sıralaması','İlk beğeniyi atan burada görünür'],
            c:['En çok beğenenler','İlk beğeniyi atan burada görünür'],d:['Beğeni sıralaması','Henüz beğeni yok']}[TEMA];
  document.getElementById('baslik').textContent=YAZI[0];
