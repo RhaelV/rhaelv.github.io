@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><title>RhaelV Puan Overlay</title>
+<meta name="viewport" content="width=840">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:840px;height:1320px;background:transparent!important;overflow:hidden}
+body{font-family:"Inter","Montserrat",system-ui,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+
+.rv{--ac:#ffd23f;--ac2:#ff9f1c;position:absolute;inset:14px;border-radius:60px;overflow:hidden;
+ background:
+  radial-gradient(120% 70% at 50% -10%,color-mix(in srgb,var(--ac) 22%,transparent),transparent 60%),
+  radial-gradient(90% 60% at 110% 110%,color-mix(in srgb,var(--ac2) 16%,transparent),transparent 60%),
+  linear-gradient(165deg,rgba(13,16,32,.95),rgba(20,23,44,.93) 55%,rgba(11,13,26,.96));
+ box-shadow:0 30px 80px rgba(0,0,0,.45),inset 0 0 0 1px rgba(255,255,255,.06);
+ transition:--ac .8s,--ac2 .8s}
+/* animated gradient border */
+.rv::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:4px;
+ background:conic-gradient(from var(--spin,0deg),var(--ac),transparent 25%,var(--ac2) 50%,transparent 75%,var(--ac));
+ -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
+ opacity:.9;animation:spin 8s linear infinite}
+@property --spin{syntax:"<angle>";inherits:false;initial-value:0deg}
+@property --ac{syntax:"<color>";inherits:true;initial-value:#ffd23f}
+@property --ac2{syntax:"<color>";inherits:true;initial-value:#ff9f1c}
+@keyframes spin{to{--spin:360deg}}
+/* fine grid texture */
+.rv::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;
+ background-image:linear-gradient(rgba(255,255,255,.035) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.035) 2px,transparent 2px);
+ background-size:44px 44px;-webkit-mask:radial-gradient(80% 60% at 50% 40%,#000,transparent)}
+
+/* top bar */
+.bar{position:absolute;left:54px;right:54px;top:46px;display:flex;gap:12px;z-index:3}
+.bar i{flex:1;height:9px;border-radius:9px;background:rgba(255,255,255,.14);overflow:hidden}
+.bar i b{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,var(--ac),var(--ac2))}
+.bar i.done b{width:100%}
+.top{position:absolute;left:54px;right:54px;top:84px;display:flex;align-items:center;justify-content:space-between;z-index:3}
+.tag{display:flex;align-items:center;gap:14px;font-weight:800;font-size:30px;letter-spacing:3px;color:#e9ecff}
+.tag svg{width:36px;height:32px}
+.live{display:flex;align-items:center;gap:10px;font-size:26px;font-weight:800;letter-spacing:2px;color:#ff5a6a;
+ padding:8px 18px;border-radius:999px;background:rgba(255,40,60,.14);border:2px solid rgba(255,90,106,.45)}
+.live:before{content:"";width:13px;height:13px;border-radius:50%;background:#ff3b52;box-shadow:0 0 14px #ff3b52;animation:blink 1.4s infinite}
+@keyframes blink{50%{opacity:.25}}
+
+/* slides */
+.slide{position:absolute;left:0;right:0;top:150px;bottom:0;padding:0 54px;opacity:0;pointer-events:none}
+.slide.on{opacity:1}
+.slide .in{opacity:0;transform:translateY(34px)}
+.slide.on .in{animation:rise .65s cubic-bezier(.2,.9,.25,1.15) both}
+.slide.off .in{animation:fall .45s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(34px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes fall{from{opacity:1;transform:none}to{opacity:0;transform:translateY(-26px)}}
+.d1{animation-delay:.05s!important}.d2{animation-delay:.13s!important}.d3{animation-delay:.21s!important}.d4{animation-delay:.29s!important}
+.d5{animation-delay:.37s!important}.d6{animation-delay:.45s!important}.d7{animation-delay:.53s!important}.d8{animation-delay:.61s!important}
+
+.eyebrow{display:inline-flex;align-items:center;gap:12px;margin-top:38px;font-size:28px;font-weight:800;letter-spacing:6px;color:var(--ac)}
+.eyebrow:before{content:"";width:34px;height:4px;border-radius:4px;background:var(--ac)}
+h1{font-size:92px;line-height:.98;font-weight:900;letter-spacing:-1px;margin-top:16px}
+h1 em{font-style:normal;background:linear-gradient(90deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{margin-top:18px;font-size:32px;line-height:1.35;color:#c6cbe6;font-weight:600}
+
+/* contest */
+/* contest title (no brand / amount) */
+.title{margin-top:6px;font-size:112px;line-height:.98;font-weight:900;letter-spacing:-3px;white-space:nowrap;
+ background:linear-gradient(180deg,#fff3b0 0%,#ffd23f 45%,#f59e0b 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+ filter:drop-shadow(0 8px 0 rgba(122,79,0,.85)) drop-shadow(0 0 40px rgba(255,200,40,.35))}
+.prize{display:inline-block;margin-top:30px;padding:16px 44px;border-radius:26px;background:linear-gradient(180deg,#ffe27a,#f5b40b);color:#3a2400;
+ font-size:46px;font-weight:900;letter-spacing:2px;box-shadow:0 12px 0 #8a5a00,0 20px 40px rgba(245,180,11,.35)}
+.s-earn.few .rows{gap:22px;margin-top:40px}
+.s-earn.few .row{height:150px}
+.s-earn.few .ico{flex-basis:92px;height:92px}
+.s-earn.few .note{margin-top:30px}
+
+.s-contest{text-align:center}
+.s-contest .eyebrow,.s-score .eyebrow{display:flex;justify-content:center}
+.trophy{display:block;width:210px;height:210px;margin:22px auto 0;filter:drop-shadow(0 18px 40px rgba(255,190,40,.45));animation:float 3.2s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-12px) rotate(-2deg)}}
+.money{margin-top:4px;font-size:168px;line-height:.95;font-weight:900;letter-spacing:-6px;white-space:nowrap;
+ background:linear-gradient(180deg,#fff3b0 0%,#ffd23f 45%,#f59e0b 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+ filter:drop-shadow(0 10px 0 rgba(122,79,0,.85)) drop-shadow(0 0 40px rgba(255,200,40,.35))}
+.money small{font-size:92px;letter-spacing:-2px}
+.ty{display:inline-block;margin-top:22px;padding:16px 40px;border-radius:26px;background:#f27a1a;font-size:46px;font-weight:900;letter-spacing:1px;
+ box-shadow:0 12px 0 #9a4300,0 20px 40px rgba(242,122,26,.35)}
+.coupon{margin-top:18px;font-size:44px;font-weight:900;letter-spacing:1px}
+.winners{display:flex;justify-content:center;gap:34px;margin-top:34px}
+.win{width:300px;padding:26px 0 24px;border-radius:34px;background:rgba(255,255,255,.06);border:3px solid rgba(255,255,255,.14)}
+.win svg{width:110px;height:74px}
+.win b{display:block;margin-top:8px;font-size:60px;font-weight:900}
+.win span{display:block;margin-top:4px;font-size:30px;font-weight:800;color:#ffe08a}
+.win.g{border-color:rgba(255,210,63,.7);background:rgba(255,210,63,.10);box-shadow:0 0 40px rgba(255,210,63,.18)}
+.win.s{border-color:rgba(227,231,242,.6);background:rgba(227,231,242,.07)}
+.fine{margin-top:32px;font-size:28px;color:#b9bfdc;font-weight:600}
+.fine b{color:#fff}
+
+/* rows (earn + market) */
+.rows{margin-top:40px;display:flex;flex-direction:column;gap:22px}
+.row{display:flex;align-items:center;gap:26px;height:150px;padding:0 32px;border-radius:34px;
+ background:linear-gradient(90deg,color-mix(in srgb,var(--ac) 12%,rgba(255,255,255,.04)),rgba(255,255,255,.035));
+ border:2px solid color-mix(in srgb,var(--ac) 30%,rgba(255,255,255,.08))}
+.ico{flex:0 0 92px;height:92px;border-radius:26px;display:grid;place-items:center;
+ background:color-mix(in srgb,var(--ac) 18%,#141933);border:2px solid color-mix(in srgb,var(--ac) 45%,transparent);color:var(--ac)}
+.ico svg{width:52px;height:52px}
+.txt{flex:1;min-width:0}
+.txt b{display:block;font-size:42px;font-weight:900;letter-spacing:.3px;white-space:nowrap}
+.txt small{display:block;margin-top:6px;font-size:27px;color:#b9c0db;font-weight:600;white-space:nowrap}
+.pts{font-size:46px;font-weight:900;color:var(--ac);white-space:nowrap;text-align:right}
+.pts small{display:block;font-size:22px;letter-spacing:3px;color:#9aa3c4;font-weight:800;text-align:right}
+.note{margin-top:28px;padding:24px 30px;border-radius:28px;background:rgba(255,255,255,.05);border:2px dashed rgba(255,255,255,.16);
+ font-size:28px;line-height:1.35;color:#d4d9f0;font-weight:600;text-align:center}
+.note b{color:var(--ac)}
+
+.s-earn .rows{gap:16px;margin-top:32px}
+.s-earn .row{height:124px}
+.s-earn .ico{flex-basis:80px;height:80px}
+.s-earn .note{margin-top:22px}
+.row.hot{background:linear-gradient(90deg,rgba(255,90,140,.18),rgba(255,255,255,.035));border-color:rgba(255,120,160,.55)}
+.row.hot .ico{color:#ff7aa8;border-color:rgba(255,122,168,.6);background:rgba(255,90,140,.16)}
+.row.hot .pts{color:#ff8fb6}
+/* market */
+.s-market .row{height:112px;gap:22px;padding:0 26px}
+.s-market .rows{gap:14px;margin-top:30px}
+.s-market h1,.s-score h1{font-size:78px}
+.s-market .note{margin-top:22px;padding:18px 24px}
+.s-market .ico{flex-basis:76px;height:76px}
+.cmd{font-family:"JetBrains Mono","Consolas",monospace;font-weight:800;font-size:38px;color:#fff}
+.price{flex:0 0 auto;padding:14px 22px;border-radius:20px;background:color-mix(in srgb,var(--ac) 22%,#141933);border:2px solid color-mix(in srgb,var(--ac) 55%,transparent);
+ font-size:36px;font-weight:900;color:var(--ac);white-space:nowrap}
+
+/* score */
+.s-score{text-align:center}
+.gem{display:block;width:260px;height:260px;margin:56px auto 0;filter:drop-shadow(0 20px 50px rgba(80,200,255,.45));animation:float 3.4s ease-in-out infinite}
+.big{display:inline-block;margin-top:40px;padding:26px 60px;border-radius:40px;font-family:"JetBrains Mono","Consolas",monospace;font-size:96px;font-weight:800;
+ color:#06121c;background:linear-gradient(90deg,var(--ac),var(--ac2));box-shadow:0 14px 0 color-mix(in srgb,var(--ac2) 55%,#000),0 24px 60px color-mix(in srgb,var(--ac) 35%,transparent)}
+.chips{display:flex;justify-content:center;gap:18px;margin-top:56px}
+.chip{padding:16px 26px;border-radius:999px;background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.16);font-family:"JetBrains Mono","Consolas",monospace;font-size:32px;font-weight:800}
+
+/* footer */
+.foot{position:absolute;left:54px;right:54px;bottom:44px;display:flex;align-items:center;justify-content:space-between;z-index:3;
+ font-size:26px;font-weight:700;color:#9aa1c2}
+.foot b{color:#fff}
+.dots{display:flex;gap:10px}
+.dots i{width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.2);transition:all .4s}
+.dots i.on{width:36px;border-radius:12px;background:var(--ac)}
+
+/* sparkles (contest) */
+.spk{position:absolute;width:12px;height:12px;border-radius:50%;background:#ffe27a;box-shadow:0 0 16px #ffd23f;opacity:0;pointer-events:none}
+.s-contest.on~.spk,.rv.contest .spk{animation:twinkle 2.6s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(.4)}50%{opacity:.9;transform:scale(1)}}
+
+</style></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&family=JetBrains+Mono:wght@800&display=swap" rel="stylesheet">
+<div class="rv" id="rv">
+ <div class="bar" id="bar"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
+ <div class="top">
+  <div class="tag"><svg viewBox="0 0 7 6" shape-rendering="crispEdges"><path fill="#ff2a3d" d="M1 0h2v1H1zM4 0h2v1H4zM0 1h7v2H0zM1 3h5v1H1zM2 4h3v1H2zM3 5h1v1H3z"/><path fill="#fff" d="M1 1h1v1H1z"/></svg>MINECRAFT HARDCORE</div>
+  <div class="live">CANLI</div>
+ </div>
+
+ <!-- 1: contest -->
+ <section class="slide s-contest" data-ac="#ffd23f" data-ac2="#ff9f1c">
+  <div class="eyebrow in d1">PUAN TOPLA</div>
+  <svg class="trophy in d2" viewBox="0 0 100 100"><defs><linearGradient id="tg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff1a8"/><stop offset=".5" stop-color="#ffd23f"/><stop offset="1" stop-color="#e09a00"/></linearGradient></defs>
+   <path d="M27 20H13c0 15 7 22 17 23M73 20h14c0 15-7 22-17 23" fill="none" stroke="#ffd23f" stroke-width="6" stroke-linecap="round"/>
+   <path d="M27 12h46v22c0 15-10 25-23 26C37 59 27 49 27 34z" fill="url(#tg)" stroke="#8a5a00" stroke-width="2.5"/>
+   <path d="M36 18v14c0 8 4 14 10 17" fill="none" stroke="#fff7cc" stroke-width="3" stroke-linecap="round" opacity=".8"/>
+   <rect x="44" y="59" width="12" height="13" fill="#d99a00"/><rect x="31" y="72" width="38" height="11" rx="4" fill="url(#tg)" stroke="#8a5a00" stroke-width="2.5"/>
+   <path d="M50 22l3 6.5 7 .8-5.2 4.8 1.4 7-6.2-3.6-6.2 3.6 1.4-7-5.2-4.8 7-.8z" fill="#fff" opacity=".9"/></svg>
+  <div class="title in d3">KASIM<br>YARIŞMASI</div>
+  <div class="prize in d4">ÖZEL ÖDÜL</div>
+  <div class="winners">
+   <div class="win g in d6"><svg viewBox="0 0 90 60"><path d="M6 52 12 14l18 20L45 6l15 28 18-20 6 38z" fill="#ffd23f" stroke="#7a4f00" stroke-width="3" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" fill="#ffd23f"/><circle cx="45" cy="5" r="5" fill="#ffd23f"/><circle cx="78" cy="12" r="5" fill="#ffd23f"/></svg><b style="color:#ffd23f">1.</b><span>Kazanır</span></div>
+   <div class="win s in d7"><svg viewBox="0 0 90 60"><path d="M6 52 12 14l18 20L45 6l15 28 18-20 6 38z" fill="#e3e7f2" stroke="#5f667a" stroke-width="3" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" fill="#e3e7f2"/><circle cx="45" cy="5" r="5" fill="#e3e7f2"/><circle cx="78" cy="12" r="5" fill="#e3e7f2"/></svg><b style="color:#e3e7f2">2.</b><span>Kazanır</span></div>
+  </div>
+  <div class="fine in d8"><b>İlk 2</b>'ye özel ödül · <b>30 Kasım</b>'a kadar</div>
+ </section>
+
+ <!-- 2: earn -->
+ <section class="slide s-earn few" data-ac="#6ff0b8" data-ac2="#2fd3c6">
+  <div class="eyebrow in d1">ÜCRETSİZ</div>
+  <h1 class="in d2">PUAN <em>KAZAN</em></h1>
+  <div class="rows">
+   <div class="row in d3"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.5H5l-3 3v-11.5A8.5 8.5 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5Z"/><path d="M8 11.5h.01M12.5 11.5h.01M17 11.5h.01"/></svg></div><div class="txt"><b>Yorum yaz</b><small>dakikada 1 kez sayılır</small></div><div class="pts">+1<small>PUAN</small></div></div>
+   <div class="row in d4"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/></svg></div><div class="txt"><b>Sohbette aktif kal</b><small>her dakika</small></div><div class="pts">+0,5<small>PUAN</small></div></div>
+   <div class="row in d5"><div class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-8-5.3-8-11.2A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 2.8C20 15.7 12 21 12 21Z"/></svg></div><div class="txt"><b>1.000 beğeni</b><small>ekrana dokun, biriktir</small></div><div class="pts">+2<small>PUAN</small></div></div>
+  </div>
+  <div class="note in d8">Puanların <b>sonraki yayına kalır</b> · harcadığın puan <b>sıralamadan düşmez</b></div>
+ </section>
+
+ <!-- 3: market -->
+ <section class="slide s-market" data-ac="#c3a6ff" data-ac2="#ff7ad9">
+  <div class="eyebrow in d1">PUAN MARKETİ</div>
+  <h1 class="in d2">PUANINI <em>HARCA</em></h1>
+  <div class="rows">
+   <div class="row in d3"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="#1f8f7a"/><circle cx="12" cy="12" r="5" fill="#35d0b0"/><circle cx="12" cy="12" r="2.2" fill="#0b3b33"/></svg></div><div class="txt"><span class="cmd">!enderincisi</span><small>2 Ender İncisi</small></div><div class="price">75 P</div></div>
+   <div class="row in d4"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 7c-2-2-7-1.5-7 4.5S9 21 12 20c3 1 7-2.5 7-8.5S14 5 12 7Z" fill="#ffc531"/><path d="M12 7c0-2 1-3.5 3-4" stroke="#6b4a1e" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M8.5 10c-.8 1-1 2.5-.8 3.8" stroke="#fff6c7" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg></div><div class="txt"><span class="cmd">!altinelma</span><small>Altın Elma</small></div><div class="price">200 P</div></div>
+   <div class="row in d5"><div class="ico"><svg viewBox="0 0 24 24"><path d="M7 3h10l4 6-9 12L3 9z" fill="#4be3f0"/><path d="M7 3l5 6 5-6M3 9h18M12 9v12" stroke="#c9fbff" stroke-width="1.2" fill="none"/></svg></div><div class="txt"><span class="cmd">!elmasset</span><small>Tam Elmas Set</small></div><div class="price">500 P</div></div>
+   <div class="row in d6"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 7c-2-2-7-1.5-7 4.5S9 21 12 20c3 1 7-2.5 7-8.5S14 5 12 7Z" fill="#ffc531"/><path d="M12 7c0-2 1-3.5 3-4" stroke="#6b4a1e" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M4 6l1 2 2 1-2 1-1 2-1-2-2-1 2-1zM20 14l.8 1.5 1.5.8-1.5.8-.8 1.5-.8-1.5-1.5-.8 1.5-.8z" fill="#f3b6ff"/></svg></div><div class="txt"><span class="cmd">!buyuluelma</span><small>Büyülü Altın Elma</small></div><div class="price">1.000 P</div></div>
+   <div class="row in d7"><div class="ico"><svg viewBox="0 0 24 24"><rect x="8" y="3" width="8" height="7" rx="2" fill="#f4d35e"/><rect x="6" y="10" width="12" height="9" rx="2" fill="#e0b13a"/><path d="M3 12h3v3H3zM18 12h3v3h-3z" fill="#f4d35e"/><rect x="10" y="5.5" width="1.6" height="1.6" fill="#1d5c3a"/><rect x="12.4" y="5.5" width="1.6" height="1.6" fill="#1d5c3a"/><path d="M9 19h6v2H9z" fill="#b8861f"/></svg></div><div class="txt"><span class="cmd">!totem</span><small>Ölümsüzlük Totemi</small></div><div class="price">2.000 P</div></div>
+  </div>
+  <div class="note in d8">Komutu sohbete yaz, <b>eşya envanterime gelsin</b></div>
+ </section>
+
+ <!-- 4: score -->
+ <section class="slide s-score" data-ac="#6edff7" data-ac2="#5b7cff">
+  <div class="eyebrow in d1">PUANIN</div>
+  <h1 class="in d2">PUANINI <em>ÖĞREN</em></h1>
+  <svg class="gem in d3" viewBox="0 0 48 48" fill="none"><path d="M12 9h24l9 12-21 24L3 21Z" fill="#38c9f3" stroke="#8ef3ff" stroke-width="1.2"/><path d="m12 9 5 12 7 24 7-24 5-12M3 21h42M12 9l12 12 12-12" stroke="#c4fbff" stroke-width="1"/><path d="m24 21 7 0-7 24Z" fill="#5b6cff"/><path d="m12 9 12 12H17Z" fill="#e1ffff"/></svg>
+  <div><span class="big in d4">!score</span></div>
+  <div class="sub in d5">Sohbete yaz, kaç puanın olduğunu gör.<br>İlk 2'ye girmek için hâlâ vakit var!</div>
+  <div class="chips in d6"><span class="chip">!market</span><span class="chip">!market2</span><span class="chip">!score</span></div>
+ </section>
+
+ <div class="foot"><span>@<b>itsrhaelv</b></span><div class="dots" id="dots"><i></i><i></i><i></i><i></i></div></div>
+</div>
+
+<script>
+(function(){
+ var DUR=7000; // ms per slide
+ function start(){
+  var rv=document.getElementById('rv');
+  if(!rv||rv.dataset.started)return;
+  rv.dataset.started='1';
+  var slides=[].slice.call(rv.querySelectorAll('.slide'));
+  var bars=[].slice.call(rv.querySelectorAll('#bar i'));
+  var dots=[].slice.call(rv.querySelectorAll('#dots i'));
+  var n=-1,t0=0,frozen=null;
+  // sparkles for the contest slide
+  var sc=rv.querySelector('.s-contest');
+  for(var k=0;k<22;k++){var s=document.createElement('i');s.className='spk';
+   s.style.left=(6+Math.random()*88)+'%';s.style.top=(14+Math.random()*62)+'%';
+   s.style.animationDelay=(Math.random()*2.6).toFixed(2)+'s';var z=.5+Math.random()*1.1;s.style.width=s.style.height=(10*z).toFixed(1)+'px';sc.appendChild(s);}
+  function show(i){
+   var prev=slides[n];
+   if(prev&&prev!==slides[i]){prev.classList.remove('on');prev.classList.add('off');(function(p){setTimeout(function(){p.classList.remove('off');},500);})(prev);}
+   n=i;var cur=slides[n];
+   cur.classList.remove('off');void cur.offsetWidth;cur.classList.add('on');
+   rv.style.setProperty('--ac',cur.dataset.ac);rv.style.setProperty('--ac2',cur.dataset.ac2);
+   rv.classList.toggle('contest',cur.classList.contains('s-contest'));
+   for(var j=0;j<bars.length;j++){bars[j].className=j<n?'done':'';bars[j].firstChild.style.width=j<n?'100%':'0';}
+   for(var d=0;d<dots.length;d++)dots[d].className=d===n?'on':'';
+   t0=performance.now();
+  }
+  function frame(now){
+   var p=frozen!==null?frozen:Math.min(1,(now-t0)/DUR);
+   if(bars[n])bars[n].firstChild.style.width=(p*100).toFixed(2)+'%';
+   if(frozen===null&&p>=1)show((n+1)%slides.length);
+   requestAnimationFrame(frame);
+  }
+  show(0);requestAnimationFrame(frame);
+  // preview hook (not used by StreamElements): __show(index, progress0to1)
+  window.__show=function(i,p){frozen=p==null?null:p;show(i);};
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();
+ window.addEventListener('onWidgetLoad',start);
+})();
+
+</script></body></html>
